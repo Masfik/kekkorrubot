@@ -1,7 +1,12 @@
-import LocalStorageService from './LocalStorageService';
-import { randomInteger } from './utils';
+import LocalStorageService from "./LocalStorageService";
+import { randomInteger } from "./utils";
 
-export type Quiz = { id: string; question: string, options: string[], correct_option_id: number };
+export type Quiz = {
+    id: string;
+    question: string;
+    options: string[];
+    correct_option_id: number;
+};
 
 export default class Quizzes extends LocalStorageService {
     private quizzes = this.db.getCollection<Quiz>("quizzes");

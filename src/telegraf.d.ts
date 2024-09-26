@@ -1,6 +1,6 @@
-import Loki from 'lokijs';
-import { Context, NarrowedContext, Scenes } from 'telegraf';
-import { Message, Update } from 'telegraf/types';
+import Loki from "lokijs";
+import { Context, NarrowedContext, Scenes } from "telegraf";
+import { Message, Update } from "telegraf/types";
 
 declare module "telegraf" {
     export interface Context {
@@ -14,4 +14,7 @@ export type CommandContext = Context<{
     update_id: number;
 }>;
 
-export type MessageContext = NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>;
+export type MessageContext = NarrowedContext<
+    Context<Update>,
+    Update.MessageUpdate<Message>
+>;

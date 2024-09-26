@@ -1,5 +1,5 @@
-import { Jimp, loadFont, HorizontalAlign, VerticalAlign, JimpMime } from 'jimp'
-import { SANS_64_WHITE } from 'jimp/fonts'
+import { Jimp, loadFont, HorizontalAlign, VerticalAlign, JimpMime } from "jimp";
+import { SANS_64_WHITE } from "jimp/fonts";
 
 export default async function overlayTextToImage(path: string, text: string) {
     const image = await Jimp.read(path);
