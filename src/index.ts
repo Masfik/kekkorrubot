@@ -11,6 +11,7 @@ import { addQuizCommand, addQuizScene } from "./commands/addQuiz";
 import { Stage } from "telegraf/scenes";
 import quizList from "./commands/quizList";
 import randomQuiz from "./commands/randomQuiz";
+import allowGroup from "./commands/allowGroup";
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 const db = new Loki("KekkorruBot.db", {
@@ -43,6 +44,7 @@ bot.command("manage", isAdmin, manage);
 bot.command("addquiz", isAdmin, addQuizCommand);
 bot.command(/quizlist|listquiz|listaquiz/s, isAdmin, quizList);
 bot.command("randomquiz", randomQuiz);
+bot.command("allowgroup", isAdmin, allowGroup);
 // Events
 bot.on("message", onMessage);
 
