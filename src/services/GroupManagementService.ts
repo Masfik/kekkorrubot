@@ -1,6 +1,7 @@
 import { format, sub } from "date-fns";
 import LocalStorageService from "./LocalStorageService";
 import Loki from "lokijs";
+import { randomInteger } from "./utils";
 
 interface Group {
     id: number;
@@ -14,27 +15,29 @@ interface User {
 
 interface DailyShipping {
     date: string;
-    who: {
-        a: User;
-        b: User;
-    };
+    who: User;
 }
 
 export default class GroupManagementService extends LocalStorageService {
     private readonly collectionName = `Ship_${this.groupId}`;
+    private readonly groupShipping = this.db.getCollection<DailyShipping>(
+        this.collectionName,
+    );
     private readonly today = format(new Date(), "dd/MM/yyyy");
     private readonly yesterday = format(
         sub(new Date(), { days: 1 }),
         "dd/MM/yyyy",
     );
     private readonly shippingOfTheDay;
-    private readonly shippingUsers;
+    private shippingUsers: Collection<User>;
     private readonly allowedGroups =
         this.db.getCollection<Group>("allowed_groups");
 
+    public static Kekkorru: User = { id: 153655894, first_name: "Kekkorru" };
+
     constructor(
         db: Loki,
-        private readonly groupId: number,
+        private readonly groupId?: number,
     ) {
         super(db);
         this.shippingOfTheDay = this.db.getCollection<DailyShipping>(
@@ -48,11 +51,11 @@ export default class GroupManagementService extends LocalStorageService {
         this.shippingUsers = this.db.getCollection<User>(
             `${this.collectionName}_${this.today}_users`,
         );
-        this.shippingUsers.ensureUniqueIndex("id");
     }
 
     addToAllowed(groupName: string) {
         this.allowedGroups.insert({ id: this.groupId, name: groupName });
+        this.db.addCollection(this.collectionName);
     }
 
     isAllowed(): boolean {
@@ -60,9 +63,13 @@ export default class GroupManagementService extends LocalStorageService {
         return false;
     }
 
+    getAllAllowedGroupIDs() {
+        return this.allowedGroups.data.map(({ id }) => id);
+    }
+
     dailySetup() {
         if (this.shippingUsers === null)
-            this.db.addCollection(
+            this.shippingUsers = this.db.addCollection(
                 `${this.collectionName}_${this.today}_users`,
                 {
                     indices: ["id"],
@@ -83,5 +90,21 @@ export default class GroupManagementService extends LocalStorageService {
 
         if (userFromDb?.first_name) return;
         this.shippingUsers.insert(user);
+    }
+
+    generateShipping() {
+        const allActiveUsersOfTheDay = this.shippingUsers.data;
+
+        if (allActiveUsersOfTheDay.length === 0)
+            throw "Oggi non ha scritto nessuno, pertanto non è stato possible trovare il prescelto da shippare con Kekkorru.";
+
+        const chosenOne =
+            allActiveUsersOfTheDay[
+                randomInteger(0, allActiveUsersOfTheDay.length - 1)
+            ];
+
+        this.groupShipping.insert({ date: this.today, who: chosenOne });
+
+        return chosenOne;
     }
 }
