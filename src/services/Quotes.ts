@@ -1,10 +1,16 @@
-import { Collection } from "lokijs";
 import { randomInteger } from "./utils";
+import LocalStorageService from "./LocalStorageService";
 
 export type Quote = { quote: string; caption: string };
 
-export default function getRandomQuote(quotes: Collection) {
-    const { data } = quotes;
-    if (data.length === 0) return undefined;
-    return data[randomInteger(0, data.length - 1)];
+export default class Quotes extends LocalStorageService {
+    private readonly quotes = this.db.getCollection<Quote>("quotes");
+
+    getRandomQuote() {
+        const all = this.getAll();
+        if (all.length === 0) return undefined;
+        return all[randomInteger(0, all.length - 1)];
+    }
+
+    getAll = () => this.quotes.data;
 }
