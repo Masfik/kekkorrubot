@@ -10,8 +10,10 @@ import initialiseDatabase from "./services/initialiseDatabase";
 import { addQuizCommand, addQuizScene } from "./commands/addQuiz";
 import { Stage } from "telegraf/scenes";
 import quizList from "./commands/quizList";
-import randomQuiz from "./commands/randomQuiz";
+import randomQuiz from "./events/scheduled.randomQuiz";
 import allowGroup from "./commands/allowGroup";
+import schedule from "node-schedule";
+import dailyShipping from "./events/scheduled.dailyShipping";
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 const db = new Loki("KekkorruBot.db", {
@@ -30,6 +32,7 @@ bot.use((ctx, next) => {
     ctx.admins = [
         113274582, // Masfik
         6932054019, // Wykeeki
+        153655894, // Kekkorru
     ];
     return next();
 });
@@ -43,12 +46,20 @@ bot.command("randomquote", randomQuote);
 bot.command("manage", isAdmin, manage);
 bot.command("addquiz", isAdmin, addQuizCommand);
 bot.command(/quizlist|listquiz|listaquiz/s, isAdmin, quizList);
-bot.command("randomquiz", randomQuiz);
 bot.command("allowgroup", isAdmin, allowGroup);
 // Events
 bot.on("message", onMessage);
 
 bot.launch().then(() => console.info("Avviato!"));
+
+// Scheduled events
+schedule.scheduleJob("shipping", "30 59 23 * * *", () =>
+    dailyShipping(bot, db),
+);
+schedule.scheduleJob("quiz15", "0 0 15 * * *", () => randomQuiz(bot, db));
+schedule.scheduleJob("quiz17", "0 0 17 * * *", () => randomQuiz(bot, db));
+schedule.scheduleJob("quiz19", "0 0 19 * * *", () => randomQuiz(bot, db));
+schedule.scheduleJob("quiz21", "0 0 21 * * *", () => randomQuiz(bot, db));
 
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));

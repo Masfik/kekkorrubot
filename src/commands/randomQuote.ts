@@ -1,14 +1,13 @@
 import overlayTextToImage from "../services/overlayTextToImage";
-import getRandomQuote from "../services/Quotes";
+import Quotes from "../services/Quotes";
 import Unsplash from "../services/Unsplash";
 import { CommandContext } from "../telegraf";
 
 export default async function randomQuote(ctx: CommandContext) {
     const unsplash = new Unsplash();
+    const quotes = new Quotes(ctx.db);
 
-    const randomQuote = getRandomQuote(
-        ctx.db.getCollection<{ quote: string; caption: string }>("quotes"),
-    );
+    const randomQuote = quotes.getRandomQuote();
     if (!randomQuote)
         return ctx.reply("Non ci sono citazioni di Kekkorru disponibili.");
 
