@@ -14,6 +14,14 @@ import randomQuiz from "./events/scheduled.randomQuiz";
 import allowGroup from "./commands/allowGroup";
 import schedule from "node-schedule";
 import dailyShipping from "./events/scheduled.dailyShipping";
+import addQuote, {
+    addQuoteSceneStep1,
+    addQuoteSceneStep2,
+} from "./commands/addQuote";
+import isPrivateChat from "./middleware/isPrivateChat";
+import deleteQuiz from "./commands/deleteQuiz";
+import quoteList from "./commands/quoteList";
+import deleteQuote from "./commands/deleteQuote";
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 const db = new Loki("KekkorruBot.db", {
@@ -38,19 +46,37 @@ bot.use((ctx, next) => {
 });
 bot.use(session());
 // Register all scenes (step by step commands)
-bot.use(new Stage([addQuizScene], { ttl: 120 }).middleware());
+bot.use(
+    new Stage([addQuizScene, addQuoteSceneStep1, addQuoteSceneStep2], {
+        ttl: 120,
+    }).middleware(),
+);
 
 // All commands
 bot.command("quote", quote);
 bot.command("randomquote", randomQuote);
+bot.command("addquote", isPrivateChat, isAdmin, addQuote);
+bot.command(
+    /quoteslist|quotelist|listacitazioni|quotes|listquotes|listquote/s,
+    isPrivateChat,
+    isAdmin,
+    quoteList,
+);
+bot.command("deletequote", isPrivateChat, isAdmin, deleteQuote);
 bot.command("manage", isAdmin, manage);
-bot.command("addquiz", isAdmin, addQuizCommand);
+bot.command("addquiz", isPrivateChat, isAdmin, addQuizCommand);
+bot.command("deletequiz", isPrivateChat, isAdmin, deleteQuiz);
 bot.command(/quizlist|listquiz|listaquiz/s, isAdmin, quizList);
 bot.command("allowgroup", isAdmin, allowGroup);
 // Events
 bot.on("message", onMessage);
 
-bot.launch().then(() => console.info("Avviato!"));
+bot.launch().then(() => {
+    bot.telegram.sendMessage(
+        bot.context.admins![0],
+        "Bot avviato con successo!",
+    );
+});
 
 // Scheduled events
 schedule.scheduleJob("shipping", "30 59 23 * * *", () =>
