@@ -15,6 +15,11 @@ export default class Quizzes extends LocalStorageService {
         this.quizzes.insert({ id, question, options, correct_option_id });
     }
 
+    deleteQuiz(id: string) {
+        if (!this.quizzes.findOne({ id })) throw "Quiz not found";
+        this.quizzes.chain().find({ id }).remove();
+    }
+
     getAll = () => this.quizzes.data;
 
     getRandomQuiz(): undefined | Quiz {
