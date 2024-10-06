@@ -1,9 +1,8 @@
 import { Jimp, loadFont, HorizontalAlign, VerticalAlign, JimpMime } from "jimp";
-import { SANS_64_WHITE } from "jimp/fonts";
 
 export default async function overlayTextToImage(path: string, text: string) {
     const image = await Jimp.read(path);
-    const font = await loadFont(SANS_64_WHITE);
+    const font = await loadFont(__dirname + "/fonts/IndieFlower.fnt");
 
     image.blur(5);
     image.print({
