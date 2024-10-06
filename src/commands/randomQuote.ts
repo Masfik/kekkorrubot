@@ -16,7 +16,7 @@ export default async function randomQuote(ctx: CommandContext) {
         {
             source: await overlayTextToImage(
                 await unsplash.fetchRandomPhotoURL(),
-                randomQuote.quote,
+                `${randomQuote.quote}\n- ${randomQuote.who}`,
             ),
         },
         { caption: randomQuote.caption },
