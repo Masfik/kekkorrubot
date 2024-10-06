@@ -12,7 +12,12 @@ export default function quizList(ctx: Context) {
     let quizListMsg = "";
     quizzes
         .getAll()
-        .forEach((quiz, i) => (quizListMsg += `${i + 1}) ${quiz.question}\n`));
+        .forEach(
+            (quiz, i) =>
+                (quizListMsg += `<b>${i + 1})</b> ${quiz.question}\n     <b>ID:</b> <code>${quiz.id}</code>\n\n`),
+        );
 
-    ctx.reply(`Lista dei quiz\n${quizListMsg}`);
+    ctx.reply(`✍️ <b>Lista dei quiz</b>\n\n${quizListMsg}`, {
+        parse_mode: "HTML",
+    });
 }
