@@ -2,10 +2,14 @@ import { BaseScene, SceneContext } from "telegraf/scenes";
 import isAdmin from "../middleware/isAdmin";
 import { Update } from "telegraf/types";
 import Quizzes from "../services/Quizzes";
+import annullaCommand from "../middleware/scenes/annullaCommand";
 
 export const addQuizScene = new BaseScene<SceneContext>("ADD_QUIZ");
 addQuizScene.enter((ctx) =>
-    ctx.reply("Okay, inviami il quiz in questione da aggiungere."),
+    ctx.reply(
+        "Okay, inviami il quiz in questione da aggiungere.\n\n" +
+            "Digita /annulla qualora volessi annullare l'operazione.",
+    ),
 );
 addQuizScene.on("poll", isAdmin, async (ctx) => {
     const { poll } = ctx.message as Update.PollUpdate;
@@ -22,16 +26,11 @@ addQuizScene.on("poll", isAdmin, async (ctx) => {
     ctx.scene.leave();
     await ctx.reply(`Aggiunto nuovo quiz "${poll.question}"`);
 });
-addQuizScene.command("annulla", isAdmin, async (ctx) => {
-    ctx.scene.leave();
-    ctx.reply("Operazione annullata.");
-});
+addQuizScene.command("annulla", isAdmin, annullaCommand);
 addQuizScene.on("message", isAdmin, (ctx) =>
     ctx.reply("Puoi inviare solo quiz, non altri tipi di messaggio."),
 );
 
 export async function addQuizCommand(ctx: SceneContext) {
-    if (ctx.chat.type !== "private")
-        return ctx.reply("Per favore, esegui questo comando in privata.");
     ctx.scene.enter("ADD_QUIZ");
 }
