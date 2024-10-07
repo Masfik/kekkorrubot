@@ -1,4 +1,3 @@
-import { Context } from "telegraf";
 import { BaseScene, SceneContext } from "telegraf/scenes";
 import isAdmin from "../middleware/isAdmin";
 import annullaCommand from "../middleware/scenes/annullaCommand";

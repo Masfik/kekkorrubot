@@ -22,6 +22,8 @@ import isPrivateChat from "./middleware/isPrivateChat";
 import deleteQuiz from "./commands/deleteQuiz";
 import quoteList from "./commands/quoteList";
 import deleteQuote from "./commands/deleteQuote";
+import { commandAntispam } from "./middleware/antispam";
+import isQuote from "./middleware/isQuote";
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 const db = new Loki("KekkorruBot.db", {
@@ -53,8 +55,8 @@ bot.use(
 );
 
 // All commands
-bot.command("quote", quote);
-bot.command("randomquote", randomQuote);
+bot.command("quote", isQuote, commandAntispam, quote);
+bot.command("randomquote", commandAntispam, randomQuote);
 bot.command("addquote", isPrivateChat, isAdmin, addQuote);
 bot.command(
     /quoteslist|quotelist|listacitazioni|quotes|listquotes|listquote/s,
