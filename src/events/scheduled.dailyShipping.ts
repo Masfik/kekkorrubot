@@ -11,7 +11,7 @@ export default function dailyShipping(bot: Telegraf, db: Loki) {
             const chosenOne = shippingService.generateShipping();
             bot.telegram.sendMessage(
                 id,
-                `👩‍❤️‍💋‍👨 <b>La coppia del giorno è stata scelta!</b>\n\n<a href="tg://user?id=${chosenOne.id}">${chosenOne.first_name}</a> + <a href="tg://user?id=${GroupManagementService.Kekkorru.id}">Kekkorru</a>`,
+                `👩‍❤️‍💋‍👨 <b>La coppia del giorno è stata scelta!</b>\n\n<a href="tg://user?id=${chosenOne.id}">${chosenOne.first_name}</a> + <a href="tg://user?id=${GroupManagementService.Mauale.id}">mauale</a>`,
                 { parse_mode: "HTML" },
             );
         } catch (e) {

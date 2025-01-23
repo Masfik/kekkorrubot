@@ -23,7 +23,7 @@ export default function randomQuiz(bot: Telegraf, db: Loki) {
         );
         await bot.telegram.sendMessage(
             id,
-            "È l'ora di fare un quiz su Kekkorru! Hip hip urrà! 😊",
+            "È l'ora di fare un quiz su mauale! Hip hip urrà! 😊",
         );
     });
 }

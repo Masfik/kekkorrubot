@@ -14,11 +14,14 @@ export async function commandAntispam(ctx: Context, next: () => void) {
     if (!ctx.text?.startsWith("/")) return next();
     if (ctx.admins.includes(ctx.message.from.id)) return next(); // Admins are exempt from antispam rules
 
+    const cooldown = 5;
+
     const args = ctx.text.split(" ");
-    args[0] = args[0].toLowerCase().replace("@kekkorrubot", "");
+    args[0] = args[0]
+        .toLowerCase()
+        .replace(`@${process.env.BOT_USERNAME.toLowerCase()}`, "");
     const chatId = ctx.message.chat.id;
     const senderId = ctx.message.from.id;
-    const cooldown = 5;
     const isPrivateChat = ctx.message.chat.type === "private";
 
     // If the chatID doesn't exist already, create an empty object

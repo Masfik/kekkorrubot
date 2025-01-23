@@ -24,9 +24,10 @@ import quoteList from "./commands/quoteList";
 import deleteQuote from "./commands/deleteQuote";
 import { commandAntispam } from "./middleware/antispam";
 import isQuote from "./middleware/isQuote";
+import start from "./commands/start";
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
-const db = new Loki("KekkorruBot.db", {
+const db = new Loki("MaualeBot.db", {
     autoload: true,
     autoloadCallback: () => initialiseDatabase(db),
     autosave: true,
@@ -42,7 +43,7 @@ bot.use((ctx, next) => {
     ctx.admins = [
         113274582, // Masfik
         6932054019, // Wykeeki
-        153655894, // Kekkorru
+        320624722, // Mauale
     ];
     return next();
 });
@@ -55,6 +56,7 @@ bot.use(
 );
 
 // All commands
+bot.start(isPrivateChat, start);
 bot.command("quote", isQuote, commandAntispam, quote);
 bot.command("randomquote", commandAntispam, randomQuote);
 bot.command("addquote", isPrivateChat, isAdmin, addQuote);
@@ -68,10 +70,11 @@ bot.command("deletequote", isPrivateChat, isAdmin, deleteQuote);
 bot.command("manage", isAdmin, manage);
 bot.command("addquiz", isPrivateChat, isAdmin, addQuizCommand);
 bot.command("deletequiz", isPrivateChat, isAdmin, deleteQuiz);
-bot.command(/quizlist|listquiz|listaquiz/s, isAdmin, quizList);
+bot.command(/quizlist|listquiz|listaquiz|quizzes/s, isAdmin, quizList);
 bot.command("allowgroup", isAdmin, allowGroup);
 // Events
 bot.on("message", onMessage);
+bot.on("left_chat_member", (ctx) => {});
 
 bot.launch().then(() => {
     bot.telegram.sendMessage(

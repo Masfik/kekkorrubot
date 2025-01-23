@@ -32,12 +32,12 @@ addQuoteSceneStep2.on("message", async (ctx) => {
         id: ctx.msgId,
         quote: `"${ctx.session["quote"]}"`,
         caption: ctx.text,
-        who: "Kekkorru",
+        who: "Sacrylegio",
     });
 
     await ctx.scene.leave();
     await ctx.reply(
-        "Aggiunta nuova citazione di Kekkorru. Grazie per il tuo servizio.",
+        "Aggiunta nuova citazione di mauale. Grazie per il tuo servizio.",
     );
 });
 

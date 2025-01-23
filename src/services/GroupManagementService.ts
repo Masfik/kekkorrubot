@@ -33,7 +33,7 @@ export default class GroupManagementService extends LocalStorageService {
     private readonly allowedGroups =
         this.db.getCollection<Group>("allowed_groups");
 
-    public static Kekkorru: User = { id: 153655894, first_name: "Kekkorru" };
+    public static Mauale: User = { id: 320624722, first_name: "mauale" };
 
     constructor(
         db: Loki,
@@ -96,7 +96,7 @@ export default class GroupManagementService extends LocalStorageService {
         const allActiveUsersOfTheDay = this.shippingUsers.data;
 
         if (allActiveUsersOfTheDay.length === 0)
-            throw "Oggi non ha scritto nessuno, pertanto non è stato possible trovare il prescelto da shippare con Kekkorru.";
+            throw "Oggi non ha scritto nessuno, pertanto non è stato possible trovare il prescelto da shippare con mauale.";
 
         const chosenOne =
             allActiveUsersOfTheDay[

@@ -5,8 +5,7 @@ export default function quoteList(ctx: Context) {
     const quotes = new Quotes(ctx.db);
     const all = quotes.getAll();
 
-    if (all.length === 0)
-        return ctx.reply("Non ci sono citazioni di Kekkorru.");
+    if (all.length === 0) return ctx.reply("Non ci sono citazioni di mauale.");
 
     let quotesListMsg = "";
     all.forEach(

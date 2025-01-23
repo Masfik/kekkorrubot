@@ -9,7 +9,7 @@ export default async function randomQuote(ctx: CommandContext) {
 
     const randomQuote = quotes.getRandomQuote();
     if (!randomQuote)
-        return ctx.reply("Non ci sono citazioni di Kekkorru disponibili.");
+        return ctx.reply("Non ci sono citazioni di mauale disponibili.");
 
     await ctx.sendChatAction("upload_photo");
     await ctx.replyWithPhoto(

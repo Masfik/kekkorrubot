@@ -1,7 +1,7 @@
 {
-    "name": "kekkorrubot",
+    "name": "maualebot",
     "version": "0.0.1",
-    "description": "Bot x kekkorru",
+    "description": "Bot x mauale",
     "main": "src/index.ts",
     "scripts": {
         "start": "set DEVMODE=true & npx tsx watch src/index.ts",

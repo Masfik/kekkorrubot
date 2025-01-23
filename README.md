@@ -1,3 +1,3 @@
-# kekkorrubot
+# MaualeBot
 
-KekkorruBot
+MaualeBot
